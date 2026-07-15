@@ -69,6 +69,4 @@ Se você quiser realizar um empréstimo, o fluxo seria:
 4. Ir no menu de **Empréstimos** e informar o ID do livro e do cliente. 
 5. O sistema vai confirmar o empréstimo de forma assíncrona e o estoque do livro vai cair automaticamente para `2`.
 
-## Desenvolvimento e Organização
-- **Desenvolvido por:** [Seu Nome Aqui]
-- **Link do Kanban:** [Insira o link do seu quadro Kanban aqui]
+
