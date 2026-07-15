@@ -82,13 +82,18 @@ export class LivroController {
         const id = parseInt(await askQuestion('ID do Livro que deseja atualizar: '));
         if (isNaN(id)) throw new Error('ID deve ser um número.');
 
-        await this.livroService.consultarLivro(id);
+        const livroExistente = await this.livroService.consultarLivro(id);
 
-        const titulo = await askQuestion('Novo Título: ');
-        const autor_id = parseInt(await askQuestion('Novo ID do Autor: '));
-        const anoStr = await askQuestion('Novo Ano de Publicação (opcional): ');
-        const ano_publicacao = anoStr ? parseInt(anoStr) : undefined;
-        const quantidade = parseInt(await askQuestion('Nova Quantidade Disponível: '));
+        console.log('\n(Deixe em branco para manter o valor atual)');
+        const tituloInput = await askQuestion(`Novo Título [${livroExistente.titulo}]: `);
+        const autorIdInput = await askQuestion(`Novo ID do Autor [${livroExistente.autor_id}]: `);
+        const anoInput = await askQuestion(`Novo Ano de Publicação [${livroExistente.ano_publicacao || 'Não informado'}]: `);
+        const quantidadeInput = await askQuestion(`Nova Quantidade Disponível [${livroExistente.quantidade_disponivel}]: `);
+
+        const titulo = tituloInput.trim() !== '' ? tituloInput : livroExistente.titulo;
+        const autor_id = autorIdInput.trim() !== '' ? parseInt(autorIdInput) : livroExistente.autor_id;
+        const ano_publicacao = anoInput.trim() !== '' ? parseInt(anoInput) : (livroExistente.ano_publicacao || undefined);
+        const quantidade = quantidadeInput.trim() !== '' ? parseInt(quantidadeInput) : livroExistente.quantidade_disponivel;
 
         if (isNaN(autor_id) || isNaN(quantidade)) throw new Error('ID e Quantidade devem ser números.');
 

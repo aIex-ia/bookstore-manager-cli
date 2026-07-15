@@ -81,11 +81,14 @@ export class AutorController {
         
         if (isNaN(id)) throw new Error('ID deve ser um número.');
 
-        // Verifica existência para informar antes de pedir novos dados
-        await this.autorService.consultarAutor(id);
+        const autorExistente = await this.autorService.consultarAutor(id);
 
-        const nome = await askQuestion('Novo Nome do Autor: ');
-        const nacionalidade = await askQuestion('Nova Nacionalidade (opcional): ');
+        console.log('\n(Deixe em branco para manter o valor atual)');
+        const nomeInput = await askQuestion(`Novo Nome [${autorExistente.nome}]: `);
+        const nacionalidadeInput = await askQuestion(`Nova Nacionalidade [${autorExistente.nacionalidade || 'Não informada'}]: `);
+
+        const nome = nomeInput.trim() !== '' ? nomeInput : autorExistente.nome;
+        const nacionalidade = nacionalidadeInput.trim() !== '' ? nacionalidadeInput : autorExistente.nacionalidade;
 
         await this.autorService.atualizarAutor(id, nome, nacionalidade);
         console.log('Autor atualizado com sucesso!');

@@ -78,12 +78,16 @@ export class ClienteController {
         const id = parseInt(await askQuestion('ID do Cliente que deseja atualizar: '));
         if (isNaN(id)) throw new Error('ID deve ser um número.');
 
-        // Força validação de existência
-        await this.clienteService.consultarCliente(id);
+        const clienteExistente = await this.clienteService.consultarCliente(id);
 
-        const nome = await askQuestion('Novo Nome: ');
-        const email = await askQuestion('Novo E-mail: ');
-        const telefone = await askQuestion('Novo Telefone (opcional): ');
+        console.log('\n(Deixe em branco para manter o valor atual)');
+        const nomeInput = await askQuestion(`Novo Nome [${clienteExistente.nome}]: `);
+        const emailInput = await askQuestion(`Novo E-mail [${clienteExistente.email}]: `);
+        const telefoneInput = await askQuestion(`Novo Telefone [${clienteExistente.telefone || 'Não informado'}]: `);
+
+        const nome = nomeInput.trim() !== '' ? nomeInput : clienteExistente.nome;
+        const email = emailInput.trim() !== '' ? emailInput : clienteExistente.email;
+        const telefone = telefoneInput.trim() !== '' ? telefoneInput : clienteExistente.telefone;
 
         await this.clienteService.atualizarCliente(id, nome, email, telefone);
         console.log('Cliente atualizado com sucesso!');
