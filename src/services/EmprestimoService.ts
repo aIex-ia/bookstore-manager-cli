@@ -24,9 +24,11 @@ export class EmprestimoService {
             throw new Error('Livro indisponível para empréstimo no momento.');
         }
 
-        // Utilizando a conexão para gerenciar a transação se quiséssemos, 
-        // mas faremos via Service layer para manter a arquitetura simples:
-        
+        const emprestimoAtivo = await this.emprestimoRepository.buscarEmprestimoAtivo(livro_id, cliente_id);
+        if (emprestimoAtivo) {
+            throw new Error('O cliente já possui um empréstimo ativo deste mesmo livro.');
+        }
+
         // Decrementa a disponibilidade
         await this.livroService.atualizarLivro(
             livro.id!, 

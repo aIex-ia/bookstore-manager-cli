@@ -29,6 +29,12 @@ export class EmprestimoRepository {
         return result.rows.length ? result.rows[0] : null;
     }
 
+    async buscarEmprestimoAtivo(livro_id: number, cliente_id: number): Promise<Emprestimo | null> {
+        const query = 'SELECT * FROM emprestimos WHERE livro_id = $1 AND cliente_id = $2 AND data_devolucao IS NULL';
+        const result = await pool.query(query, [livro_id, cliente_id]);
+        return result.rows.length ? result.rows[0] : null;
+    }
+
     async updateDevolucao(id: number): Promise<Emprestimo | null> {
         // Atualiza preenchendo a data de devolução com o dia atual
         const query = 'UPDATE emprestimos SET data_devolucao = CURRENT_DATE WHERE id = $1 RETURNING *';
