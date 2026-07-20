@@ -76,7 +76,12 @@ export class AutorController {
 
     private async atualizar(): Promise<void> {
         console.log('\n-- Atualizar Autor --');
-        const idStr = await askQuestion('ID do Autor que deseja atualizar: ');
+        
+        const autores = await this.autorService.listarAutores();
+        if (autores.length > 0) console.table(autores);
+        else return console.log('Nenhum autor cadastrado para atualizar.');
+
+        const idStr = await askQuestion('\nID do Autor que deseja atualizar: ');
         const id = parseInt(idStr);
         
         if (isNaN(id)) throw new Error('ID deve ser um número.');
@@ -97,7 +102,12 @@ export class AutorController {
 
     private async remover(): Promise<void> {
         console.log('\n-- Remover Autor --');
-        const idStr = await askQuestion('ID do Autor que deseja remover: ');
+        
+        const autores = await this.autorService.listarAutores();
+        if (autores.length > 0) console.table(autores);
+        else return console.log('Nenhum autor cadastrado para remover.');
+
+        const idStr = await askQuestion('\nID do Autor que deseja remover: ');
         const id = parseInt(idStr);
         
         if (isNaN(id)) throw new Error('ID deve ser um número.');

@@ -75,7 +75,12 @@ export class ClienteController {
 
     private async atualizar(): Promise<void> {
         console.log('\n-- Atualizar Cliente --');
-        const id = parseInt(await askQuestion('ID do Cliente que deseja atualizar: '));
+        
+        const clientes = await this.clienteService.listarClientes();
+        if (clientes.length > 0) console.table(clientes);
+        else return console.log('Nenhum cliente cadastrado para atualizar.');
+
+        const id = parseInt(await askQuestion('\nID do Cliente que deseja atualizar: '));
         if (isNaN(id)) throw new Error('ID deve ser um número.');
 
         const clienteExistente = await this.clienteService.consultarCliente(id);
@@ -96,7 +101,12 @@ export class ClienteController {
 
     private async remover(): Promise<void> {
         console.log('\n-- Remover Cliente --');
-        const id = parseInt(await askQuestion('ID do Cliente que deseja remover: '));
+        
+        const clientes = await this.clienteService.listarClientes();
+        if (clientes.length > 0) console.table(clientes);
+        else return console.log('Nenhum cliente cadastrado para remover.');
+
+        const id = parseInt(await askQuestion('\nID do Cliente que deseja remover: '));
         if (isNaN(id)) throw new Error('ID deve ser um número.');
 
         await this.clienteService.removerCliente(id);

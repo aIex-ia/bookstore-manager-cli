@@ -58,6 +58,14 @@ export class ClienteService {
 
     async removerCliente(id: number): Promise<void> {
         await this.consultarCliente(id);
+
+        const { pool } = await import('../database/connection');
+        const query = 'SELECT id FROM emprestimos WHERE cliente_id = $1 AND data_devolucao IS NULL';
+        const result = await pool.query(query, [id]);
+        if (result.rows.length > 0) {
+            throw new Error('Não é possível remover um cliente que possui livros não devolvidos.');
+        }
+
         const deletado = await this.clienteRepository.remover(id);
         if (!deletado) {
             throw new Error('Erro ao remover o cliente.');
