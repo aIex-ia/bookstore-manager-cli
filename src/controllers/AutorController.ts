@@ -78,8 +78,13 @@ export class AutorController {
         console.log('\n-- Atualizar Autor --');
         
         const autores = await this.autorService.listarAutores();
-        if (autores.length > 0) console.table(autores);
-        else return console.log('Nenhum autor cadastrado para atualizar.');
+        if (autores.length > 0) {
+            console.table(autores);
+        } else {
+            console.log('Nenhum autor cadastrado para atualizar.');
+            await waitEnter();
+            return;
+        }
 
         const idStr = await askQuestion('\nID do Autor que deseja atualizar: ');
         const id = parseInt(idStr);
@@ -104,8 +109,13 @@ export class AutorController {
         console.log('\n-- Remover Autor --');
         
         const autores = await this.autorService.listarAutores();
-        if (autores.length > 0) console.table(autores);
-        else return console.log('Nenhum autor cadastrado para remover.');
+        if (autores.length > 0) {
+            console.table(autores);
+        } else {
+            console.log('Nenhum autor cadastrado para remover.');
+            await waitEnter();
+            return;
+        }
 
         const idStr = await askQuestion('\nID do Autor que deseja remover: ');
         const id = parseInt(idStr);

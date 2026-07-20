@@ -81,8 +81,13 @@ export class LivroController {
         console.log('\n-- Atualizar Livro --');
         
         const livros = await this.livroService.listarLivros();
-        if (livros.length > 0) console.table(livros);
-        else return console.log('Nenhum livro cadastrado para atualizar.');
+        if (livros.length > 0) {
+            console.table(livros);
+        } else {
+            console.log('Nenhum livro cadastrado para atualizar.');
+            await waitEnter();
+            return;
+        }
 
         const id = parseInt(await askQuestion('\nID do Livro que deseja atualizar: '));
         if (isNaN(id)) throw new Error('ID deve ser um número.');
@@ -111,8 +116,13 @@ export class LivroController {
         console.log('\n-- Remover Livro --');
         
         const livros = await this.livroService.listarLivros();
-        if (livros.length > 0) console.table(livros);
-        else return console.log('Nenhum livro cadastrado para remover.');
+        if (livros.length > 0) {
+            console.table(livros);
+        } else {
+            console.log('Nenhum livro cadastrado para remover.');
+            await waitEnter();
+            return;
+        }
 
         const id = parseInt(await askQuestion('\nID do Livro que deseja remover: '));
         if (isNaN(id)) throw new Error('ID deve ser um número.');
